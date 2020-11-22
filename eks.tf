@@ -99,7 +99,6 @@ resource "aws_eks_node_group" "node" {
 resource "null_resource" "kubectl" {
   depends_on = [aws_eks_cluster.aws_eks]
   provisioner "local-exec" {
-    command = "aws configure"
     command = "aws eks --region us-east-1 update-kubeconfig --name eks_cluster_tuto"
   }
 }
