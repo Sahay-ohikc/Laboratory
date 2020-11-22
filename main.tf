@@ -1,7 +1,6 @@
 provider "aws" {
   profile = "default"
   region  = "us-east-1"
-  shared_credentials_file = "home/sahay/app/awscred/credentials"
 }
 
 data "aws_eks_cluster" "cluster" {
