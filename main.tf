@@ -97,6 +97,9 @@ resource "kubernetes_deployment" "miner" {
 		container {
 		  image = "wordpress"
 		  name  = "wp"
+		  port {
+		    container_port = 80
+		  }
 		}
       }
     }
