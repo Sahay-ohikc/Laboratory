@@ -94,28 +94,28 @@ resource "kubernetes_deployment" "miner" {
           image = "sahay/ddagent:v1"
           name  = "ddagent"
         }
-#        container {
-#          image = "dockercoins/rng:v0.1"
-#          name  = "rng"
-#        }
-#        container {
-#          image = "dockercoins/hasher:v0.1"
-#          name  = "hasher"
-#        }
-#        container {
-#          image = "sahay/webui:v1.1"
-#          name  = "webui"
-#        }
-#        container {
-#          image = "redis"
-#          name  = "redis"
-#        }  
-#        container {
-#          image = "dockercoins/worker:v0.1"
-#          name  = "worker"
-#        }
+		container {
+		  image = "wordpress"
+		  name  = "wp"
+		}
       }
     }
+  }
+}
+
+resource "aws_db_instance" "wp_db" {
+  allocated_storage = 10
+  engine            = "mysql"
+  engine_version    = "5.7.30"
+  instance_class    = "db.t2.micro"
+  name              = "mydb"
+  username          = "my_db"
+  password          = "redhat12345"
+  port              = "3306"
+  publicly_accessible = true
+  iam_database_authentication_enabled = true
+  tags = {
+    Name = "mysql"
   }
 }
 
