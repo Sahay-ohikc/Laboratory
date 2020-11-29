@@ -65,7 +65,7 @@ resource "kubernetes_deployment" "miner" {
     }
   }
   timeouts {
-    create = "15m"
+    create = "30m"
     delete = "30m"
   }
   spec {
