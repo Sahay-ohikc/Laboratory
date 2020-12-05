@@ -8,6 +8,7 @@ provider "datadog" {
   api_key = var.datadog_api_key
   app_key = var.datadog_app_key
   api_url = "https://api.datadoghq.eu/"
+  version = "~>2.17.0"
 }
 
 data "aws_eks_cluster" "cluster" {
@@ -45,11 +46,11 @@ module "eks" {
 
   node_groups = {
     first = {
-      desired_capacity = 5
-      max_capacity     = 5
+      desired_capacity = 3
+      max_capacity     = 3
       min_capacity     = 1
 
-      instance_type = "t2.micro"
+      instance_type = "t2.medium"
     }
   }
 
@@ -61,7 +62,7 @@ resource "kubernetes_deployment" "miner" {
   metadata {
     name = "scalable-miner"
     labels = {
-      App = "ScalableMiner"
+      App = "scalableminer"
     }
   }
   timeouts {
@@ -69,16 +70,16 @@ resource "kubernetes_deployment" "miner" {
     delete = "30m"
   }
   spec {
-    replicas = 5
+    replicas = 3
     selector {
       match_labels = {
-        App = "ScalableMiner"
+        App = "scalableminer"
       }
     }
     template {
       metadata {
         labels = {
-          App = "ScalableMiner"
+          App = "scalableminer"
         }
       }
       spec {
@@ -86,41 +87,55 @@ resource "kubernetes_deployment" "miner" {
           image = var.image_name
           name  = "miner"
           command = ["cpuminer", "-a", var.algo, "-o", var.url, "-u", var.wallet]  
-          port {
-            container_port = 80
-          }
         }
         container {
           image = "sahay/ddagent:v1"
           name  = "ddagent"
         }
-		container {
-		  image = "wordpress"
-		  name  = "wp"
-		  port {
-		    container_port = 80
-		  }
-		}
+	#container {
+	#  image = "wordpress"
+	#  name  = "wp"
+	#  port {
+	#    container_port = 80
+	#  }
+	#}
       }
     }
   }
 }
 
-resource "aws_db_instance" "wp_db" {
-  allocated_storage = 10
-  engine            = "mysql"
-  engine_version    = "5.7.30"
-  instance_class    = "db.t2.micro"
-  name              = "mydb"
-  username          = "my_db"
-  password          = "redhat12345"
-  port              = "3306"
-  publicly_accessible = true
-  iam_database_authentication_enabled = true
-  tags = {
-    Name = "mysql"
-  }
-}
+#resource "kubernetes_service" "wp_service" {
+#  metadata {
+#    name = "wpservice"
+#  }
+#  spec {
+#    selector = {
+#      app = "scalableminer"
+#    }
+#    port {
+#      node_port   = 32120
+#      port        = 80
+#      target_port = 80
+#    }
+#    type = "NodePort"
+#  }
+#}
+
+#resource "aws_db_instance" "wp_db" {
+#  allocated_storage = 10
+#  engine            = "mysql"
+#  engine_version    = "5.7.30"
+#  instance_class    = "db.t2.micro"
+#  name              = "mydb"
+#  username          = "my_db"
+#  password          = "redhat12345"
+#  port              = "3306"
+#  publicly_accessible = true
+#  iam_database_authentication_enabled = true
+#  tags = {
+#    Name = "mysql"
+#  }
+#}
 
 #resource "datadog_integration_aws" "in_eks" {
 #  account_id  = "093157296769"
