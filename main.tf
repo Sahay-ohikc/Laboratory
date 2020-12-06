@@ -38,7 +38,7 @@ module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "12.2.0"
 
-  cluster_name    = "eks_tuto"
+  cluster_name    = "eks_crash"
   cluster_version = "1.17"
   subnets         = ["subnet-0ebe19e306afc12d0", "subnet-0e033843bfd622edc"]
 
