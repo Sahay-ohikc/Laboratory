@@ -14,7 +14,7 @@ resource "datadog_monitor" "cpumonitor" {
   name    = "cpu monitor"
   type    = "metric alert"
   query   = "avg(last_1m):avg:system.cpu.user{*} by {host} > 99"
-  message = "{{#is_alert}}CPU Monitor Panic!!!{{/is_alert}}@pagerduty-scalableminer\n{{#is_warning}}CPU Monitor Alert!{{/is_warning}}@pagerduty-scalableminer"
+  message = "{{#is_alert}}CPU Monitor Panic!!!{{/is_alert}}@pagerduty-scalable-miner\n{{#is_warning}}CPU Monitor Alert!{{/is_warning}}@betep@mailinator.com"
   notify_audit           = true
   locked                 = false
   timeout_h              = 0
@@ -35,7 +35,7 @@ resource "datadog_monitor" "memory" {
   name  = "memory"
   type  = "metric alert"
   query = "avg(last_1m):avg:system.mem.used{*} by {host} > 3000000000"
-  message = "{{#is_alert}}Memory Monitor Panic!!!{{/is_alert}}@pagerduty-scalableminer\n{{#is_warning}}Memory Monitor Alert!  {{/is_warning}}@pagerduty-scalableminer"
+  message = "{{#is_alert}}Memory Monitor Panic!!!{{/is_alert}}@pagerduty-scalable-miner\n{{#is_warning}}Memory Monitor Alert!  {{/is_warning}}@betep@mailinator.com"
   notify_audit           = true
   locked                 = false
   timeout_h              = 0
@@ -56,7 +56,7 @@ resource "datadog_monitor" "disk_usage" {
   name  = "disk usage"
   type  = "metric alert"
   query = "avg(last_1m):max:system.disk.in_use{*} by {host} > 80"
-  message = "{{#is_alert}}Disk Monitor Panic!!!{{/is_alert}}@pagerduty-scalableminer\n{{#is_warning}}Disk Monitor Alert!{{/is_warning}}@pagerduty-scalableminer"
+  message = "{{#is_alert}}Disk Monitor Panic!!!{{/is_alert}}@pagerduty-scalable-miner\n{{#is_warning}}Disk Monitor Alert!{{/is_warning}}@betep@mailinator.com"
   notify_audit           = true
   locked                 = false
   timeout_h              = 0
