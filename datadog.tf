@@ -13,7 +13,7 @@
 resource "datadog_monitor" "cpumonitor" {
   name    = "cpu monitor"
   type    = "metric alert"
-  query   = "avg(last_1m):avg:system.cpu.user{*} by {host} > 80"
+  query   = "avg(last_1m):avg:system.cpu.user{*} by {host} > 99"
   message = "{{#is_alert}}CPU Monitor Panic!!!{{/is_alert}}@sahay@mailinator.com\n{{#is_warning}}CPU Monitor Alert!{{/is_warning}}@sahay@mailinator.com"
   notify_audit           = true
   locked                 = false
@@ -26,15 +26,15 @@ resource "datadog_monitor" "cpumonitor" {
   no_data_timeframe      = null
   include_tags           = true
   thresholds = {
-       critical = 80
-       warning  = 50
+       critical = 99
+       warning  = 98
   }
 }
 
 resource "datadog_monitor" "memory" {
   name  = "memory"
   type  = "metric alert"
-  query = "avg(last_1m):avg:system.mem.used{*} by {host} > 980000000"
+  query = "avg(last_1m):avg:system.mem.used{*} by {host} > 3000000000"
   message = "{{#is_alert}}Memory Monitor Panic!!!{{/is_alert}}@sahay@mailinator.com\n{{#is_warning}}Memory Monitor Alert!  {{/is_warning}}@sahay@mailinator.com"
   notify_audit           = true
   locked                 = false
@@ -47,8 +47,8 @@ resource "datadog_monitor" "memory" {
   no_data_timeframe      = null
   include_tags           = true
   thresholds = {
-       critical = 980000000
-       warning  = 700000000
+       critical = 3000000000
+       warning  = 2600000000
   }
 }
 
