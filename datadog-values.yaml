@@ -325,7 +325,7 @@ datadog:
 ## ref: https://docs.datadoghq.com/agent/kubernetes/cluster/
 clusterAgent:
   # clusterAgent.enabled -- Set this to true to enable Datadog Cluster Agent
-  enabled: true
+  enabled: false
 
   ## Define the Datadog Cluster-Agent image to work with
   image:
@@ -369,7 +369,7 @@ clusterAgent:
   # Enable the metricsProvider to be able to scale based on metrics in Datadog
   metricsProvider:
     # clusterAgent.metricsProvider.enabled -- Set this to true to enable Metrics Provider
-    enabled: true
+    enabled: false
 
     # clusterAgent.metricsProvider.wpaController -- Enable informer and controller of the watermark pod autoscaler
     ## NOTE: You need to install the `WatermarkPodAutoscaler` CRD before
@@ -886,7 +886,7 @@ clusterChecksRunner:
   # clusterChecksRunner.replicas -- Number of Cluster Checks Runner instances
   ## If you want to deploy the clusterChecks agent in HA, keep at least clusterChecksRunner.replicas set to 2.
   ## And increase the clusterChecksRunner.replicas according to the number of Cluster Checks.
-  replicas: 3
+  replicas: 2
 
   # clusterChecksRunner.resources -- Datadog clusterchecks-agent resource requests and limits.
   resources: {}
