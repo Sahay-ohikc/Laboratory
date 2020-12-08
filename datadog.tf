@@ -26,8 +26,8 @@ resource "datadog_monitor" "cpumonitor" {
   no_data_timeframe      = null
   include_tags           = true
   thresholds = {
-       critical = 99
-       warning  = 98
+       critical = 90
+       warning  = 80
   }
 }
 
