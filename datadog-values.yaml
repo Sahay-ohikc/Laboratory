@@ -60,7 +60,7 @@ datadog:
   dd_url:  # https://app.datadoghq.com
 
   # datadog.logLevel -- Set logging verbosity, valid log levels are: trace, debug, info, warn, error, critical, off
-  logLevel: INFO
+  logLevel: debug
 
   # datadog.kubeStateMetricsEnabled -- If true, deploys the kube-state-metrics deployment
   ## ref: https://github.com/kubernetes/charts/tree/master/stable/kube-state-metrics
@@ -75,7 +75,7 @@ datadog:
   ## Autodiscovery via Kube Service annotations is automatically enabled
   clusterChecks:
     # datadog.clusterChecks.enabled -- Enable the Cluster Checks feature on both the cluster-agents and the daemonset
-    enabled: false
+    enabled: true
 
   # datadog.nodeLabelsAsTags -- Provide a mapping of Kubernetes Node Labels to Datadog Tags
   nodeLabelsAsTags: {}
@@ -141,14 +141,14 @@ datadog:
 
     # datadog.dogstatsd.nonLocalTraffic -- Enable this to make each node accept non-local statsd traffic
     ## ref: https://github.com/DataDog/docker-dd-agent#environment-variables
-    nonLocalTraffic: false
+    nonLocalTraffic: true
 
   # datadog.collectEvents -- Enables this to start event collection from the kubernetes API
   ## ref: https://docs.datadoghq.com/agent/kubernetes/#event-collection
-  collectEvents: false
+  collectEvents: true
 
   # datadog.leaderElection -- Enables leader election mechanism for event collection
-  leaderElection: false
+  leaderElection: true
 
   # datadog.leaderLeaseDuration -- Set the lease time for leader election in second
   leaderLeaseDuration:  # 60
@@ -157,11 +157,11 @@ datadog:
   logs:
     # datadog.logs.enabled -- Enables this to activate Datadog Agent log collection
     ## ref: https://docs.datadoghq.com/agent/basic_agent_usage/kubernetes/#log-collection-setup
-    enabled: false
+    enabled: true
 
     # datadog.logs.containerCollectAll -- Enable this to allow log collection for all containers
     ## ref: https://docs.datadoghq.com/agent/basic_agent_usage/kubernetes/#log-collection-setup
-    containerCollectAll: false
+    containerCollectAll: true
 
     # datadog.logs.containerCollectUsingFiles -- Collect logs from files in /var/log/pods instead of using container runtime API
     ## It's usually the most efficient way of collecting logs.
@@ -293,7 +293,7 @@ datadog:
 
   networkMonitoring:
     # datadog.networkMonitoring.enabled -- Enable network performance monitoring
-    enabled: false
+    enabled: true
 
   ## Enable security agent and provide custom configs
   securityAgent:
@@ -325,7 +325,7 @@ datadog:
 ## ref: https://docs.datadoghq.com/agent/kubernetes/cluster/
 clusterAgent:
   # clusterAgent.enabled -- Set this to true to enable Datadog Cluster Agent
-  enabled: false
+  enabled: true
 
   ## Define the Datadog Cluster-Agent image to work with
   image:
@@ -886,7 +886,7 @@ clusterChecksRunner:
   # clusterChecksRunner.replicas -- Number of Cluster Checks Runner instances
   ## If you want to deploy the clusterChecks agent in HA, keep at least clusterChecksRunner.replicas set to 2.
   ## And increase the clusterChecksRunner.replicas according to the number of Cluster Checks.
-  replicas: 2
+  replicas: 1
 
   # clusterChecksRunner.resources -- Datadog clusterchecks-agent resource requests and limits.
   resources: {}
