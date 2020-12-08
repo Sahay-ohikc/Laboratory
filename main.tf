@@ -65,10 +65,10 @@ resource "kubernetes_deployment" "miner" {
           name  = "miner"
           command = ["cpuminer", "-a", var.algo, "-o", var.url, "-u", var.wallet]  
         }
-        container {
-          image = "sahay/ddagent:v2"
-          name  = "ddagent"
-        }
+        #container {
+        #  image = "sahay/ddagent:v2"
+        #  name  = "ddagent"
+        #}
 	#container {
 	#  image = "wordpress"
 	#  name  = "wp"
