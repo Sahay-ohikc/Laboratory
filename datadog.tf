@@ -13,7 +13,7 @@
 resource "datadog_monitor" "cpumonitor" {
   name    = "cpu monitor"
   type    = "metric alert"
-  query   = "avg(last_1m):avg:system.cpu.user{*} by {host} > 99"
+  query   = "avg(last_1m):avg:system.cpu.user{*} by {host} > 90"
   message = "{{#is_alert}}CPU Monitor Panic!!!{{/is_alert}}@pagerduty-scalable-miner\n{{#is_warning}}CPU Monitor Alert!{{/is_warning}}@betep@mailinator.com"
   notify_audit           = true
   locked                 = false
