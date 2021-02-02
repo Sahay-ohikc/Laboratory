@@ -41,10 +41,10 @@ resource "google_compute_router_nat" "zone51-nat" {
 #}
 
 resource "google_compute_instance" "bastion" {
-  name = "bastion1"
+  name         = "bastion1"
   machine_type = "f1-micro"
-  zone = "europe-west3-a"
-  tags = ["bastion", "public"]
+  zone         = "europe-west3-a"
+  tags         = ["bastion", "public"]
   boot_disk {
     initialize_params {
       image = "ubuntu-minimal-2004-focal-v20210130"
@@ -54,4 +54,27 @@ resource "google_compute_instance" "bastion" {
     subnetwork = google_compute_subnetwork.zone51-public.id
     access_config {}
   }
+}
+
+resource "google_compute_firewall" "bastion-ssh" {
+  name    = "bastion-ssh" 
+  network = google_compute_network.zone51.name
+  allow {
+    protocol = "tcp"
+    ports    = ["22"]
+  }
+  direction = "INGRESS"
+  target_tags = ["bastion", "public"]
+}
+
+resource "google_compute_firewall" "bastion-7000" {
+  name    = "bastion-7000" 
+  network = google_compute_network.zone51.name
+  allow {
+    protocol = "tcp"
+    ports    = ["7000"]
+  }
+  direction     = "INGRESS"
+  target_tags   = ["bastion", "public"]
+  source_ranges = ["10.51.1.0/24"] 
 }
