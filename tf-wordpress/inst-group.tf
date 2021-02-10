@@ -62,7 +62,7 @@ resource "google_compute_region_instance_group_manager" "wordpress-tf" {
   target_size  = 2
 
   named_port {
-    name = "HTTP"
+    name = "http"
     port = 80
   }
 
