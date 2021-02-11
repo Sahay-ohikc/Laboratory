@@ -35,7 +35,7 @@ resource "google_compute_firewall" "zone53-network-allow-http" {
 
   allow {
     protocol = "tcp"
-    ports    = ["80", "433"]
+    ports    = ["80", "443"]
   }
 }
 
