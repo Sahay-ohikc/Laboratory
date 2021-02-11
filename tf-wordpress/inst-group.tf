@@ -45,8 +45,9 @@ resource "google_compute_health_check" "autohealing" {
   }
 }
 
-resource "google_compute_autoscaler" "wordpress-autposcaler" {
+resource "google_compute_region_autoscaler" "wordpress-autoscaler" {
   name   = "wordpress-autoscaler"
+  region = "us-east1"
   target = google_compute_region_instance_group_manager.wordpress-tf.id
   autoscaling_policy {
     max_replicas    = 5
