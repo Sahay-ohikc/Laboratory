@@ -4,9 +4,7 @@ resource "google_service_account" "wp-service-account" {
 
 resource "google_compute_instance_template" "wordpress-template-5" {
   name        = "wordpress-template"
-  
   tags = ["wordpress", "private"]
-
   machine_type         = "f1-micro"
   can_ip_forward       = false
 
@@ -44,6 +42,17 @@ resource "google_compute_health_check" "autohealing" {
 
   tcp_health_check {
     port = "80"
+  }
+}
+
+resource "google_compute_autoscaler" "wordpress-autposcaler" {
+  name   = "wordpress-autoscaler"
+  target = google_compute_region_instance_group_manager.wordpress-tf.id
+  autoscaling_policy {
+    max_replicas    = 5
+    min_replicas    = 1
+    cooldown_period = 60
+    cpu_utilization { target = 0.8 }
   }
 }
 
