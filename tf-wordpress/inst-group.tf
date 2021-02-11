@@ -69,7 +69,7 @@ resource "google_compute_region_instance_group_manager" "wordpress-tf" {
   }
 
   #target_pools = [google_compute_target_pool.wordpress-tf.id]
-  target_size  = 2
+  #target_size  = 1
 
   named_port {
     name = "http"
