@@ -4,9 +4,7 @@ resource "google_service_account" "wp-service-account" {
 
 resource "google_compute_instance_template" "wordpress-template-5" {
   name        = "wordpress-template"
-  
   tags = ["wordpress", "private"]
-
   machine_type         = "f1-micro"
   can_ip_forward       = false
 
@@ -47,6 +45,18 @@ resource "google_compute_health_check" "autohealing" {
   }
 }
 
+resource "google_compute_region_autoscaler" "wordpress-autoscaler" {
+  name   = "wordpress-autoscaler"
+  region = "us-east1"
+  target = google_compute_region_instance_group_manager.wordpress-tf.id
+  autoscaling_policy {
+    max_replicas    = 5
+    min_replicas    = 1
+    cooldown_period = 60
+    cpu_utilization { target = 0.8 }
+  }
+}
+
 resource "google_compute_region_instance_group_manager" "wordpress-tf" {
   name = "wordpress-tf-group"
 
@@ -59,7 +69,7 @@ resource "google_compute_region_instance_group_manager" "wordpress-tf" {
   }
 
   #target_pools = [google_compute_target_pool.wordpress-tf.id]
-  target_size  = 2
+  #target_size  = 1
 
   named_port {
     name = "http"
