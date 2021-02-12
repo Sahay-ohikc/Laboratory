@@ -1,0 +1,70 @@
+---
+# tasks file for wordpress
+- name: update
+  apt:
+    update_cache: yes
+  become: true
+
+- name: upgrade system
+  apt:
+    upgrade: yes
+    upgrade: dist
+    update_cache: true
+  become: true
+
+- name: php
+  apt: 
+    name:
+    - php
+    - php-curl
+    - php-common
+    - php-mbstring
+    - php-gd
+    - php-intl
+    - php-xml
+    - php-mysql
+    - php-fpm
+    - php-zip 
+    state: present
+  become: true
+  
+- name: mariadb
+  apt:
+    name:
+    - mariadb-server
+    - mariadb-client
+    state: present
+  become: true
+
+- name: apache
+  apt: 
+    name: apache2 
+    state: present
+  become: true
+
+- name: unzip
+  apt:
+    name: unzip
+    state: present
+  become: true
+   
+- name: upload script for gcfuse
+  ansible.builtin.copy:
+  src: ~/dangerzone/packer/ansible/roles/wordpress/files/gcfuse-install.sh
+  dest: /tmp/gcfuse-install.sh
+  owner: okhab
+  mode: '0755'
+
+- name: upload script for wordpress
+  ansible.builtin.copy:
+  src: ~/dangerzone/packer/ansible/roles/wordpress/files/wordpress-install.sh
+  dest: /tmp/wordpress-install.sh
+  owner: okhab
+  mode: '0755'
+
+- name: run script for gcfuse
+  ansible.builtin.script: /tmp/gcfuse-install.sh
+
+- name: run script for wordpress
+  ansible.builtin.script: /tmp/wordpress-install.sh
+  
