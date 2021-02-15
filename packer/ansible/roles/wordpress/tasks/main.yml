@@ -50,51 +50,51 @@
    
 - name: upload config for apache default site
   ansible.builtin.copy:
-  src: ~/dangerzone/packer/ansible/roles/wordpress/files/000-default.conf
-  dest: /etc/apache2/sites-enabled/000-default.conf
-  owner: okhab
-  mode: '0644'
+    src: ~/dangerzone/packer/ansible/roles/wordpress/files/000-default.conf
+    dest: /etc/apache2/sites-enabled/000-default.conf
+    owner: okhab
+    mode: '0644'
 
 - name: upload config for apache dir.conf
   ansible.builtin.copy:
-  src: ~/dangerzone/packer/ansible/roles/wordpress/files/dir.conf
-  dest: /etc/apache2/mods-enabled/dir.conf
-  owner: okhab
-  mode: '0644'
+    src: ~/dangerzone/packer/ansible/roles/wordpress/files/dir.conf
+    dest: /etc/apache2/mods-enabled/dir.conf
+    owner: okhab
+    mode: '0644'
 
-- name: upload script for installing gcsfuse
-  ansible.builtin.copy:
-  src: ~/dangerzone/packer/ansible/roles/wordpress/files/gcfuse-install.sh
-  dest: /tmp/gcfuse-install.sh
-  owner: okhab
-  mode: '0755'
+#- name: upload script for installing gcsfuse
+#  ansible.builtin.copy:
+#    src: ~/dangerzone/packer/ansible/roles/wordpress/files/gcsfuse-install.sh
+#    dest: /tmp/gcsfuse-install.sh
+#    owner: okhab
+#    mode: '0755'
 
 - name: run script for installing gcsfuse
-  ansible.builtin.script: /tmp/gcfuse-install.sh
+  script: home/sahay/dangerzone/packer/ansible/roles/wordpress/files/gcsfuse-install.sh
 
--name: upload gcfuse.conf
+- name: upload gcfuse.conf
   ansible.builtin.copy:
-  src: ~/dangerzone/packer/ansible/roles/wordpress/files/fuse.conf
-  dest: /etc/fuse.conf
-  owner: okhab
-  mode: '0644'
+    src: ~/dangerzone/packer/ansible/roles/wordpress/files/fuse.conf
+    dest: /etc/fuse.conf
+    owner: okhab
+    mode: '0644'
 
--name: upload script for running gcsfuse
-  ansible.builtin.copy:
-  src: ~/dangerzone/packer/ansible/roles/wordpress/files/gcsfuse-run.sh
-  dest: /tmp/gcsfuse-run.sh
-  owner: okhab
-  mode: '0755'
+#- name: upload script for running gcsfuse
+#  ansible.builtin.copy:
+#    src: ~/dangerzone/packer/ansible/roles/wordpress/files/gcsfuse-run.sh
+#    dest: /tmp/gcsfuse-run.sh
+#    owner: okhab
+#    mode: '0755'
 
 - name: run script for running gcsfuse
-  ansible.builtin.script: /tmp/gcsfuse-run.sh
+  script: /home/sahay/dangerzone/packer/ansible/roles/wordpress/files/gcsfuse-run.sh
 
-- name: upload script for wordpress
-  ansible.builtin.copy:
-  src: ~/dangerzone/packer/ansible/roles/wordpress/files/wordpress-install.sh
-  dest: /tmp/wordpress-install.sh
-  owner: okhab
-  mode: '0755'
+#- name: upload script for wordpress
+#  ansible.builtin.copy:
+#    src: ~/dangerzone/packer/ansible/roles/wordpress/files/wordpress-install.sh
+#    dest: /tmp/wordpress-install.sh
+#    owner: okhab
+#    mode: '0755'
 
 - name: run script for wordpress
-  ansible.builtin.script: /tmp/wordpress-install.sh
+  script: /home/sahay/dangerzone/packer/ansible/roles/wordpress/files/wordpress-install.sh
