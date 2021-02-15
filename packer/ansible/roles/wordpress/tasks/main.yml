@@ -54,6 +54,7 @@
     dest: /etc/apache2/sites-enabled/000-default.conf
     owner: okhab
     mode: '0644'
+  become: true
 
 - name: upload config for apache dir.conf
   ansible.builtin.copy:
@@ -61,23 +62,28 @@
     dest: /etc/apache2/mods-enabled/dir.conf
     owner: okhab
     mode: '0644'
+  become: true
 
-#- name: upload script for installing gcsfuse
-#  ansible.builtin.copy:
-#    src: ~/dangerzone/packer/ansible/roles/wordpress/files/gcsfuse-install.sh
-#    dest: /tmp/gcsfuse-install.sh
-#    owner: okhab
-#    mode: '0755'
+- name: upload script for installing gcsfuse
+  ansible.builtin.copy:
+    src: ~/dangerzone/packer/ansible/roles/wordpress/files/gcsfuse-install.sh
+    dest: /tmp/gcsfuse-install.sh
+    owner: okhab
+    mode: '0755'
+  become: true
 
 - name: run script for installing gcsfuse
-  script: home/sahay/dangerzone/packer/ansible/roles/wordpress/files/gcsfuse-install.sh
+#  script: home/sahay/dangerzone/packer/ansible/roles/wordpress/files/gcsfuse-install.sh
+#  script: /tmp/gcsfuse-install.sh
+  shell: /tmp/gcsfuse-install.sh
 
 - name: upload gcfuse.conf
   ansible.builtin.copy:
     src: ~/dangerzone/packer/ansible/roles/wordpress/files/fuse.conf
     dest: /etc/fuse.conf
-    owner: okhab
+    owner: root
     mode: '0644'
+  become: true
 
 #- name: upload script for running gcsfuse
 #  ansible.builtin.copy:
