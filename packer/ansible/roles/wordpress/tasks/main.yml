@@ -12,7 +12,7 @@
     update_cache: true
   become: true
 
-- name: php
+- name: install php
   apt: 
     name:
     - php
@@ -28,7 +28,7 @@
     state: present
   become: true
   
-- name: mariadb
+- name: install mariadb
   apt:
     name:
     - mariadb-server
@@ -36,13 +36,18 @@
     state: present
   become: true
 
-- name: apache
+- name: install apache
   apt: 
     name: apache2 
     state: present
   become: true
 
-- name: unzip
+- name: enable apache
+  service:
+    name: apache2
+    enabled: yes
+
+- name: install unzip
   apt:
     name: unzip
     state: present
@@ -81,7 +86,7 @@
   ansible.builtin.copy:
     src: ~/dangerzone/packer/ansible/roles/wordpress/files/fuse.conf
     dest: /etc/fuse.conf
-    owner: root
+    owner: okhab
     mode: '0644'
   become: true
 
@@ -102,5 +107,5 @@
 #    owner: okhab
 #    mode: '0755'
 
-- name: run script for wordpress
-  script: /home/sahay/dangerzone/packer/ansible/roles/wordpress/files/wordpress-install.sh
+#- name: run script for wordpress
+#  script: /home/sahay/dangerzone/packer/ansible/roles/wordpress/files/wordpress-install.sh
