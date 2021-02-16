@@ -1,5 +1,10 @@
-resource "google_sql_database_instance" "wordpress-db-mysql2" {
-  name             = "wordpress-db-mysql2"
+resource "google_sql_database" "wordpress-database" {
+  name     = "wordpress-database"
+  instance = google_sql_database_instance.wordpress-db-mysql4.name
+}
+
+resource "google_sql_database_instance" "wordpress-db-mysql4" {
+  name             = "wordpress-db-mysql4"
   database_version = "MYSQL_8_0"
   region           = "us-east1"
   depends_on = [google_service_networking_connection.private_vpc_connection]
