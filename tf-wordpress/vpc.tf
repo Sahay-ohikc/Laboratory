@@ -39,6 +39,16 @@ resource "google_compute_firewall" "zone53-network-allow-http" {
   }
 }
 
+resource "google_compute_firewall" "zone53-network-allow-sql" {
+  name    = "zone53-network-allow-sql"
+  network = google_compute_network.zone53.name
+
+  allow {
+    protocol = "tcp"
+    ports    = ["1433"]
+  }
+}
+
 resource "google_compute_firewall" "zone53-network-allow-ssh" {
   name    = "zone53-network-allow-ssh"
   network = google_compute_network.zone53.name

@@ -1,7 +1,3 @@
-resource "google_service_account" "wp-service-account" {
-  account_id   = "wp-service"
-}
-
 resource "google_compute_instance_template" "wordpress-template-5" {
   name        = "wordpress-template"
   tags = ["wordpress", "private"]
@@ -14,7 +10,7 @@ resource "google_compute_instance_template" "wordpress-template-5" {
   }
 
   disk {
-    source_image = "wordpress-image-1"
+    source_image = "wordpress-packer-image"
     auto_delete  = true
     boot         = true
   }
