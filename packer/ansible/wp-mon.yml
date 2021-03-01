@@ -1,0 +1,4 @@
+- name : wp-mon
+  hosts: all
+  roles: 
+    - wp-mon
