@@ -1,0 +1,32 @@
+---
+# tasks file for esearch image, static config
+- name: update
+  apt:
+    update_cache: yes
+  become: true
+
+- name: upgrade system
+  apt:
+    upgrade: yes
+    upgrade: dist
+    update_cache: true
+  become: true
+
+- name: run script for esearch
+  script: ~/dangerzone/demo/packer/ansible/roles/esearch-master/files/elasticsearch.sh
+  become: true
+  
+- name: upload config for esearch
+  copy:
+    src: ~/dangerzone/demo/packer/ansible/roles/esearch-master/files/elasticsearch.yml
+    dest: /etc/elasticsearch/elasticsearch.yml
+    owner: okhab
+    mode: '0644'
+  become: true
+  
+- name: enable esearch
+  service:
+    name: elasticsearch
+    state: started
+    enabled: yes
+  become: true

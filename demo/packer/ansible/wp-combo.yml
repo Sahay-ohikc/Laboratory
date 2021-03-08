@@ -1,0 +1,4 @@
+- name : wp-combo
+  hosts: all
+  roles:
+    - wp-combo

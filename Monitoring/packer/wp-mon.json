@@ -1,0 +1,22 @@
+{
+  "builders": [
+     {
+       "type": "googlecompute",
+       "account_file": "./cred/account.json",
+       "project_id": "okhab-education-25433",
+       "source_image": "ubuntu-minimal-2004-focal-v20210130",
+       "ssh_username": "okhab",
+       "zone": "us-east1-b",
+       "subnetwork": "zone53-public-sub",
+       "machine_type": "f1-micro", 
+       "image_description": "wp-mon-image",
+       "image_name": "wp-mon-image"    }
+  ], 
+  "provisioners":[
+    {
+      "type": "ansible",
+      "playbook_file": "./ansible/wp-mon.yml",
+      "user": "okhab"
+    }
+  ]
+}

@@ -1,4 +1,0 @@
-- name : packer-ansible-wordpress
-  hosts: all
-  roles:
-    - wordpress

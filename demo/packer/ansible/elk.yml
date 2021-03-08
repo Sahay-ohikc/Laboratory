@@ -1,0 +1,30 @@
+- name : esearch-master
+  hosts: esearch-master
+  vars:
+    credentials_file: ~/dangerzone/demo/packer/cred/account.json
+    project_id: okhab-education-25433
+  roles: 
+    - esearch-master
+- name : esearch-data
+  hosts: esearch-data
+  vars:
+    credentials_file: ~/dangerzone/demo/packer/cred/account.json
+    project_id: okhab-education-25433
+  roles: 
+    - esearch-data
+- name : logstash
+  hosts: logstash
+  vars:
+    credentials_file: ~/dangerzone/demo/packer/cred/account.json
+    project_id: okhab-education-25433
+  roles: 
+    - logstash
+- name : kibana
+  hosts: kibana
+  vars:
+    credentials_file: ~/dangerzone/demo/packer/cred/account.json
+    project_id: okhab-education-25433
+  roles: 
+    - kibana
+
+

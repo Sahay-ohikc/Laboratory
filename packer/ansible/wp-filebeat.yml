@@ -1,4 +1,0 @@
-- name : wp-filebeat
-  hosts: all
-  roles: 
-    - wp-filebeat

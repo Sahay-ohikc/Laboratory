@@ -1,0 +1,174 @@
+us-east1
+
+https://gmusumeci.medium.com/getting-started-with-terraform-and-google-cloud-platform-gcp-deploying-vms-in-a-private-only-f9ab61fa7d15
+
+openvpn: 
+https://www.digitalocean.com/community/tutorials/how-to-set-up-an-openvpn-server-on-ubuntu-18-04
+https://www.cloudsigma.com/run-your-own-vpn-server-under-docker-with-openvpn-access-server/
+{
+ sudo apt update
+ sudo apt upgrade
+
+ sudo apt-get install apt-transport-https ca-certificates curl software-properties-common
+ 
+ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+ 
+ sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+ 
+ sudo apt-get update
+ sudo apt-get install docker-ce
+
+ sudo docker create --name=openvpn-as --restart=always -v /home/docker/openvpn-as/config:/config -e INTERFACE=ens3 --net=host --privileged linuxserver/openvpn-as
+
+ sudo docker start openvpn-as
+}
+
+sudo apt-get update && sudo apt-get upgrade -y
+PHP:
+ sudo apt install -y php php-curl php-common php-mbstring php-gd php-intl php-xml php-mysql php-fpm php-zip - може щось зайве
+MariaDB:
+ sudo apt install mariadb-server mariadb-client -y
+
+Apache2:
+  sudo apt install apache2 
+
+GCL Fuse:
+  export GCSFUSE_REPO=gcsfuse-`lsb_release -c -s`
+  echo "deb http://packages.cloud.google.com/apt $GCSFUSE_REPO main" | sudo tee /etc/apt/sources.list.d/gcsfuse.list
+  curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+  sudo apt-get update
+  sudo apt-get install gcsfuse -y
+  sudo chown okhab /var/www
+  gcsfuse -o nonempty -o allow_other wp-bucket1 /var/www
+
+Unzip:
+  sudo apt install unzip
+
+Wordpress:
+  wget https://wordpress.org/latest.zip
+  unzip latest.zip -d /var/www/html/ - 45 min
+  chown -R www-data:www-data /var/www/html/wordpress - ??
+
+/etc/apache2/mods-enabled/dir.conf
+/etc/apache2/sites-enabled/000-default.conf
+/etc/fuse.conf
+/var/www/html/wordpress/wp-config.php
+ 
+SSH! gcloud compute ssh okhab@wordpress-0j93
+ps aux | grep php
+systemctl list-unit-files --type service -all
+
+#!/bin/bash
+gcsfuse -o nonempty -o allow_other wp-bucket1 /var/www
+fusermount -u
+
+startup script: https://linuxconfig.org/how-to-run-script-on-startup-on-ubuntu-20-04-focal-fossa-server-desktop
+
+chmod +x /home/okhab/fuse.sh
+
+DNS sahay.pp.ua - https://cloud.google.com/dns/docs/tutorials/create-domain-tutorial
+
+Packer:
+export VER="1.6.6"
+wget https://releases.hashicorp.com/packer/${VER}/packer_${VER}_linux_amd64.zip
+unzip packer_${VER}_linux_amd64.zip
+sudo mv packer /usr/local/bin
+
+packer build -force wp-mon.json
+ansible-galaxy init test-role-1
+
+Monitoring:
+authorizing agent: https://cloud.google.com/logging/docs/agent/authorization#create-service-account
+sudo mkdir -p /etc/google/auth
+sudo mv okhab-education-25433-255496390538.json /etc/google/auth/application_default_credentials.json
+GOOGLE_APPLICATION_CREDENTIALS="/etc/google/auth/application_default_credentials.json"
+sudo chmod 0400 "$GOOGLE_APPLICATION_CREDENTIALS"
+
+Логування в лоад-балансер: 
+gcloud compute backend-services update wordpress-backend --global --enable-logging --logging-sample-rate=1
+resource.type="http_load_balancer" AND http_request.status>=400
+https://cloud.google.com/load-balancing/docs/https/https-logging-monitoring#gcloud_1
+
+Ввімкнення логування в апачі. (але в метриках немає помилок 400, 500)
+(cd /etc/stackdriver/collectd.d/ && sudo curl -O https://raw.githubusercontent.com/Stackdriver/stackdriver-agent-service-configs/master/etc/collectd.d/apache.conf)
+sudo service stackdriver-agent restart
+https://cloud.google.com/monitoring/agent/plugins/apache
+
+https://stackoverflow.com/questions/65092493/google-cloud-functions-monitor-http-status-codes - !!!
+
+ELK stack - Elasticsearch, Logstash, and Kibana.
+
+Elasticsearch:
+1. 3*Elasticsearch cluster 4 RAM 2 CPU e2-medium/e2-small? ubuntu port 9200
+curl -fsSL https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
+echo "deb https://artifacts.elastic.co/packages/7.x/apt stable main" | sudo tee -a /etc/apt/sources.list.d/elastic-7.x.list
+sudo apt update
+sudo apt install elasticsearch
+#config /etc/elasticsearch/elasticsearch.yml
+sudo systemctl start elasticsearch
+sudo systemctl enable elasticsearch
+https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-elasticsearch-on-ubuntu-20-04
+
+Kibana:
+3. Kibana+nginx - public - f1-micro, ubuntu 
+curl -fsSL https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
+echo "deb https://artifacts.elastic.co/packages/7.x/apt stable main" | sudo tee -a /etc/apt/sources.list.d/elastic-7.x.list
+sudo apt update
+sudo apt install kibana
+sudo apt-get install nginx
+#config /etc/kibana/kibana.yml
+sudo systemctl enable kibana
+sudo systemctl start kibana
+sudo systemctl enable nginx
+
+echo "okhab:`openssl passwd -apr1`" | sudo tee -a /etc/nginx/htpasswd.users
+#verify:
+#conf /etc/nginx/sites-available/sahay.pp.ua
+sudo ln -s /etc/nginx/sites-available/sahay.pp.ua /etc/nginx/sites-enabled/sahay.pp.ua
+sudo systemctl reload nginx
+
+Logstash:
+2. 2*logstash log forwarder. g1-small 
+curl -fsSL https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
+echo "deb https://artifacts.elastic.co/packages/7.x/apt stable main" | sudo tee -a /etc/apt/sources.list.d/elastic-7.x.list
+sudo apt update
+sudo apt install logstash
+#config /etc/logstash/conf.d/logstash.conf
+sudo systemctl enable logstash
+
+Check: /usr/share/logstash/bin/logstash --config.test_and_exit --path.settings /etc/logstash -f /etc/logstash/conf.d/logstash.conf
+
+Filebeat: https://logit.io/sources/configure/apache
+curl -fsSL https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
+echo "deb https://artifacts.elastic.co/packages/7.x/apt stable main" | sudo tee -a /etc/apt/sources.list.d/elastic-7.x.list
+sudo apt update
+sudo apt install filebeat
+sudo filebeat modules enable system
+sudo filebeat setup --pipelines --modules system
+sudo filebeat modules enable apache
+#config /etc/filebeat/filebeat.yml
+
+ansible-playbook -u okhab elk.yml 
+
+SSH Jump:
+~/.ssh/config 
+ Host 10.2.2.*
+    ProxyJump 35.185.16.99
+sudo rm /home/sahay/.ssh/known_hosts
+
+1. Terraform vpc+bucket+provider+servacc - перед здачею, бо файли в бакет йдуть дуже довго, 45-50 хв.
+2. packer build -force wp-combo.json - імедж для темплейта вордпресу з вкладеним файлбітом. 6 хв
+   Імедж потрібен, щоб автоскейлер теоретично міг піднімати вже готові інстанси. 
+3. tf all 15:42 - хвилин 20
+4. write down DNS - виправляю айпі для ДНС на сайті, який мені дав ДНС
+5. configure bastion sudo nano ~/.ssh/config 
+6. put static kibana IP in site config
+7.
+sudo rm /home/sahay/.ssh/known_hosts 
+ansible-playbook -u okhab elk.yml 12 хвилин
+8. echo "okhab:`openssl passwd -apr1`" | sudo tee -a /etc/nginx/htpasswd.users
+9. connect to db, test kibana, test DNS.
+wordpress-database
+
+response=requests.get('http://34.98.83.68/')
+return response.status_code
