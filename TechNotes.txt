@@ -172,3 +172,18 @@ wordpress-database
 
 response=requests.get('http://34.98.83.68/')
 return response.status_code
+
+gcloud container clusters get-credentials gke-stud --region us-east1
+kubectl create namespace prometheus
+kubectl create -f clusterRole.yaml
+kubectl create -f configMap.yaml -n prometheus
+kubectl create -f prometheus-deployment.yaml -n prometheus
+kubectl get pods -n prometheus
+kubectl port-forward prometheus-deployment-x-x 8080:9090 -n prometheus
+export KUBE_NAMESPACE=prometheus
+export KUBE_CLUSTER=gke-stud
+export GCP_REGION=us-east1
+export GCP_PROJECT=okhab-education-25433
+export DATA_DIR=/prometheus/
+export DATA_VOLUME=prometheus-storage-volume
+export SIDECAR_IMAGE_TAG=release-0.3.2
