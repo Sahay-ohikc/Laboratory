@@ -10,4 +10,6 @@ CrashCourse - some files from DevOps crash course
 
 Monitoring - tf-files and packer with ansible for image. Made for gcp web-server on which you could test monitoring alerts.
 
+python - some code for serverless function
+
 kubetask - tf-files for educational GKE-cluster.
